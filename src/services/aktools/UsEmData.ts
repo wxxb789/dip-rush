@@ -12,10 +12,12 @@ type RawUsEmData = Record<string, string>;
 type UsEmDataDictionary = ReadonlyMap<string, string>;
 
 const isRawUsEmData = (data: unknown): data is RawUsEmData => {
-  if (typeof data !== "object" || data === null) return false;
+  if (typeof data !== 'object' || data === null) {
+    return false;
+  }
 
   return Object.entries(data).every(
-    ([key, value]) => typeof key === "string" && typeof value === "string",
+    ([key, value]) => typeof key === 'string' && typeof value === 'string'
   );
 };
 
@@ -36,7 +38,7 @@ class UsEmDataService {
         error:
           error instanceof Error
             ? error
-            : new Error("Unknown initialization error"),
+            : new Error('Unknown initialization error'),
       };
     }
   }
@@ -50,14 +52,16 @@ class UsEmDataService {
   }
 
   private async loadData(): Promise<void> {
-    if (this.initialized) return;
+    if (this.initialized) {
+      return;
+    }
 
     try {
-      const module = await import("../../data/us_em.json");
+      const module = await import('../../data/us_em.json');
       const rawData = module.default;
 
       if (!isRawUsEmData(rawData)) {
-        throw new Error("Invalid US EM data format");
+        throw new Error('Invalid US EM data format');
       }
 
       this.data = new Map(Object.entries(rawData));
@@ -66,8 +70,8 @@ class UsEmDataService {
     } catch (error) {
       throw new Error(
         `Failed to load US EM data: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`,
+          error instanceof Error ? error.message : 'Unknown error'
+        }`
       );
     }
   }
@@ -77,19 +81,19 @@ class UsEmDataService {
   }
 
   public static getKeys(): string[] {
-    return Array.from(this.dictionary?.keys() || []);
+    return Array.from(UsEmDataService.dictionary?.keys() || []);
   }
 
   public static getValues(): string[] {
-    return Array.from(this.dictionary?.values() || []);
+    return Array.from(UsEmDataService.dictionary?.values() || []);
   }
 
   public static getEntries(): [string, string][] {
-    return Array.from(this.dictionary?.entries() || []);
+    return Array.from(UsEmDataService.dictionary?.entries() || []);
   }
 
   public static getValue(key: string): string | undefined {
-    return this.dictionary?.get(key);
+    return UsEmDataService.dictionary?.get(key);
   }
 }
 
