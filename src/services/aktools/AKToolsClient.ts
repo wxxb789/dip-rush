@@ -8,6 +8,20 @@ import type {
 } from '@/types/api';
 import axios from 'axios';
 
+interface StockUsHistData {
+  日期: string;
+  开盘: number;
+  收盘: number;
+  最高: number;
+  最低: number;
+  成交量: number;
+  成交额: number;
+  振幅: number;
+  涨跌幅: number;
+  涨跌额: number;
+  换手率: number;
+}
+
 const formatDate = (date: number): string => {
   const d = new Date(date * 1000);
   return d.toISOString().split('T')[0].replace(/-/g, '');
@@ -84,10 +98,26 @@ class AKToolsClient implements MarketDataProvider {
 
     validateUSStockParams(params);
 
-    const response = await axios.get(`${this.baseUrl}/stock_us_hist`, {
-      params,
-    });
-    return this.adaptCandles(response.data);
+    const response = await axios.get<Array<StockUsHistData>>(
+      `${this.baseUrl}/stock_us_hist`,
+      {
+        params,
+      }
+    );
+
+    const candles: CandleData = {
+      c: response.data.map((d: StockUsHistData) => d.收盘),
+      h: response.data.map((d: StockUsHistData) => d.最高),
+      l: response.data.map((d: StockUsHistData) => d.最低),
+      o: response.data.map((d: StockUsHistData) => d.开盘),
+      s: 'ok', // Assuming status is always 'ok'
+      t: response.data.map(
+        (d: StockUsHistData) => new Date(d.日期).getTime() / 1000
+      ), // Convert to Unix timestamp
+      v: response.data.map((d: StockUsHistData) => d.成交量),
+    };
+
+    return candles;
   }
 
   async fetchBatch<T>(

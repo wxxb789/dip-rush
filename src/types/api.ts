@@ -4,9 +4,9 @@ export interface CandleData {
   h: number[]; // high prices
   l: number[]; // low prices
   o: number[]; // open prices
-  s: string; // status
-  t: number[]; // timestamps
+  t: number[]; // date, pattern like: 2024-03-14
   v: number[]; // volumes
+  s: string; // status
 }
 
 export interface Quote {
