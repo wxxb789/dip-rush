@@ -1,0 +1,98 @@
+sequenceDiagram
+    participant User
+    participant App
+    participant Dashboard
+    participant AKToolsService
+    participant DipDetector
+    participant TechnicalAnalysisService
+    participant StockDataCache
+    participant ResultsTable
+    participant StockChart
+    
+    %% App initialization flow
+    User->>App: Open application
+    App->>Dashboard: Initialize dashboard
+    
+    %% Dashboard initialization flow
+    Dashboard->>DipDetector: getStockScreenerResults(defaultCriteria)
+    DipDetector->>StockDataCache: getFromCache("screenerResults")
+    
+    alt Cache hit
+        StockDataCache-->>DipDetector: Return cached results
+        DipDetector-->>Dashboard: Return screener results
+    else Cache miss
+        DipDetector->>AKToolsService: getStockSymbols()
+        AKToolsService-->>DipDetector: Return stock symbols
+        
+        loop For each stock symbol batch
+            DipDetector->>AKToolsService: getStockCandles(symbols, resolution, timeframe)
+            AKToolsService-->>DipDetector: Return candle data
+            
+            DipDetector->>TechnicalAnalysisService: calculateRSI(prices, period)
+            TechnicalAnalysisService-->>DipDetector: Return RSI values
+            
+            DipDetector->>TechnicalAnalysisService: calculateMACD(prices, parameters)
+            TechnicalAnalysisService-->>DipDetector: Return MACD values
+            
+            DipDetector->>TechnicalAnalysisService: calculateBollingerBands(prices, period, stdDev)
+            TechnicalAnalysisService-->>DipDetector: Return Bollinger Bands
+            
+            DipDetector->>TechnicalAnalysisService: calculateMovingAverage(prices, shortPeriod)
+            TechnicalAnalysisService-->>DipDetector: Return 50-day MA
+            
+            DipDetector->>TechnicalAnalysisService: calculateMovingAverage(prices, longPeriod)
+            TechnicalAnalysisService-->>DipDetector: Return 200-day MA
+            
+            DipDetector->>DipDetector: detectDips(stockData)
+        end
+        
+        DipDetector->>StockDataCache: addToCache("screenerResults", results, expiry)
+        DipDetector-->>Dashboard: Return screener results
+    end
+    
+    Dashboard->>ResultsTable: updateData(results)
+    ResultsTable-->>Dashboard: Render table
+    
+    alt No dips found
+        ResultsTable->>User: Display "The greatest wisdom lies in patience"
+    else Dips found
+        ResultsTable->>User: Display dip detection results
+    end
+    
+    %% User interaction with table
+    User->>ResultsTable: Click on column header to sort
+    ResultsTable->>ResultsTable: sort(column)
+    ResultsTable-->>User: Display sorted results
+    
+    %% User selects a stock for detailed view
+    User->>ResultsTable: Click on stock row
+    ResultsTable->>Dashboard: selectSymbol(symbol)
+    Dashboard->>AKToolsService: getStockData(symbol, extendedTimeframe)
+    AKToolsService-->>Dashboard: Return detailed stock data
+    
+    Dashboard->>TechnicalAnalysisService: calculateAllIndicators(stockData)
+    TechnicalAnalysisService-->>Dashboard: Return comprehensive indicator data
+    
+    Dashboard->>StockChart: updateData(stockData, indicatorData)
+    StockChart-->>User: Display interactive chart with indicators
+    
+    %% User toggles theme
+    User->>App: Click theme toggle
+    App->>App: toggleTheme()
+    App-->>User: Display updated theme
+    
+    %% User toggles language
+    User->>App: Click language toggle
+    App->>App: toggleLanguage()
+    App-->>User: Display content in selected language
+    
+    %% Refresh data flow
+    User->>Dashboard: Click refresh button
+    Dashboard->>DipDetector: getStockScreenerResults(currentCriteria)
+    DipDetector->>AKToolsService: Fetch fresh data
+    AKToolsService-->>DipDetector: Return updated data
+    DipDetector->>TechnicalAnalysisService: Process updated data
+    TechnicalAnalysisService-->>DipDetector: Return updated indicators
+    DipDetector-->>Dashboard: Return updated results
+    Dashboard->>ResultsTable: updateData(updatedResults)
+    ResultsTable-->>User: Display updated results

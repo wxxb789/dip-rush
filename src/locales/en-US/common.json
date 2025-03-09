@@ -1,0 +1,120 @@
+{
+  "app": {
+    "title": "DipRush - Market Dip Detection",
+    "description": "Detect market dips using technical indicators and find potential buying opportunities."
+  },
+  "welcome": {
+    "title": "Welcome to DipRush",
+    "subtitle": "Your intelligent companion for detecting market opportunities",
+    "getStarted": "Get Started"
+  },
+  "features": {
+    "technicalAnalysis": "Advanced Technical Analysis",
+    "technicalAnalysisDesc": "Powerful indicators including RSI, MACD, and Bollinger Bands to identify potential market dips",
+    "realtime": "Real-Time Analysis",
+    "realtimeDesc": "Stay ahead with real-time market data and instant technical analysis",
+    "screening": "Smart Screening",
+    "screeningDesc": "Automated screening to find stocks meeting your technical criteria",
+    "i18n": "Multi-Language Support",
+    "i18nDesc": "Access DipRush in your preferred language with built-in translations",
+    "theme": "Customizable Theme",
+    "themeDesc": "Choose between light and dark modes for comfortable viewing"
+  },
+  "navigation": {
+    "screener": "Screener",
+    "stockDetail": "Stock Detail",
+    "settings": "Settings",
+    "about": "About",
+    "dashboard": "Dashboard"
+  },
+  "api": {
+    "apiKeyRequired": "API Key Required",
+    "apiKeyMessage": "Please enter your Finnhub API key to access stock data.",
+    "apiKeyInstructions": "You need a valid Finnhub API key to use this application.",
+    "apiKeyPlaceholder": "Enter your Finnhub API key",
+    "saveApiKey": "Save API Key",
+    "validatingKey": "Validating...",
+    "getFreeKey": "Get Free API Key",
+    "invalidKey": "Please enter a valid API key",
+    "successKey": "API key saved successfully",
+    "showKey": "Show API key",
+    "hideKey": "Hide API key"
+  },
+  "screener": {
+    "title": "Find Dips",
+    "screeningCriteria": "Screening Criteria",
+    "rsiThreshold": "RSI Threshold",
+    "macdCrossover": "MACD Bullish Crossover",
+    "bollingerBandTouch": "Price Below Lower Bollinger Band",
+    "goldenCross": "50-day MA crosses 200-day MA",
+    "runScreener": "Run Screener",
+    "running": "Running...",
+    "noResultsFound": "No matching stocks found. Try adjusting your criteria."
+  },
+  "stockDetail": {
+    "searchStock": "Search Stock",
+    "searchPlaceholder": "Enter stock symbol (e.g., AAPL)",
+    "search": "Search",
+    "noStockSelected": "No stock selected",
+    "selectStock": "Select a stock from the screener results or search for a specific symbol.",
+    "technicalIndicators": "Technical Indicators",
+    "selectTimeframe": "Select Timeframe",
+    "symbolView": "Symbol View",
+    "noSymbol": "No symbol selected"
+  },
+  "chart": {
+    "price": "Price",
+    "volume": "Volume",
+    "rsi": "RSI",
+    "macd": "MACD",
+    "bollingerBands": "Bollinger Bands",
+    "movingAverages": "Moving Averages",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "high": "High",
+    "low": "Low",
+    "open": "Open",
+    "close": "Close",
+    "overbought": "Overbought",
+    "oversold": "Oversold",
+    "signalLine": "Signal Line",
+    "histogram": "Histogram",
+    "upperBand": "Upper Band",
+    "lowerBand": "Lower Band",
+    "ma50": "50-Day MA",
+    "ma200": "200-Day MA"
+  },
+  "table": {
+    "symbol": "Symbol",
+    "name": "Name",
+    "price": "Price",
+    "change": "Change",
+    "rsi": "RSI",
+    "volume": "Volume",
+    "industry": "Industry",
+    "noResults": "No matching stocks found",
+    "loading": "Loading stock data...",
+    "search": "Search stocks...",
+    "sortBy": "Sort by",
+    "matches": "matches",
+    "indicators": "Indicators",
+    "rsiLow": "RSI low",
+    "macdCross": "MACD cross",
+    "bollingerTouch": "Bollinger touch",
+    "goldenCross": "Golden cross"
+  },
+  "errors": {
+    "errorOccurred": "An error occurred",
+    "tryAgain": "Try again"
+  },
+  "footer": {
+    "copyright": "© 2023 DipRush. All rights reserved.",
+    "version": "Version",
+    "documentation": "Documentation",
+    "github": "GitHub",
+    "about": "About",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
+  }
+}

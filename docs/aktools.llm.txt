@@ -1,0 +1,74 @@
+# AKTools API Documentation
+
+## Official Documentation References
+- AKTools Documentation: 
+  - https://github.com/akfamily/aktools/blob/main/docs/aktools.md
+  - https://aktools.akfamily.xyz/aktools/
+- AKShare Documentation (AKTools is built on AKShare):
+  - https://akshare.akfamily.xyz/
+
+## US Stock Historical Data API
+
+### Endpoint
+```
+https://aktools.550w.xyz/api/public/stock_us_hist
+```
+
+### Request Parameters
+
+| Parameter   | Description                    | Example    | Notes                     |
+|------------|--------------------------------|------------|---------------------------|
+| symbol     | Stock symbol with market code  | 105.QQQ    | Uses stock_us_spot_em format |
+| period     | Time period for data           | daily      | Currently only supports 'daily' |
+| start_date | Start date for historical data | 20250218   | Format: YYYYMMDD |
+| end_date   | End date for historical data   | 20250220   | Format: YYYYMMDD |
+| adjust     | Price adjustment type          | qfq        | Forward adjusted price |
+
+### Example Request
+```
+https://aktools.550w.xyz/api/public/stock_us_hist?symbol=105.QQQ&period=daily&start_date=20250218&end_date=20250220&adjust=qfq
+```
+
+### Response Format
+
+The API returns an array of daily stock data objects with the following fields:
+
+| Field (Chinese) | Field (English)  | Type    | Description                           |
+|----------------|------------------|---------|---------------------------------------|
+| 日期           | date            | string  | Trading date (YYYY-MM-DD format)      |
+| 开盘           | open            | number  | Opening price                         |
+| 收盘           | close           | number  | Closing price                         |
+| 最高           | high            | number  | Highest price of the day              |
+| 最低           | low             | number  | Lowest price of the day               |
+| 成交量         | volume          | number  | Trading volume                        |
+| 成交额         | amount          | number  | Trading amount in base currency       |
+| 振幅           | amplitude       | number  | Price amplitude percentage            |
+| 涨跌幅         | change_percent  | number  | Price change percentage               |
+| 涨跌额         | change_amount   | number  | Absolute price change                 |
+| 换手率         | turnover_rate   | number  | Stock turnover rate                   |
+
+### Example Response
+```json
+[
+  {
+    "日期": "2025-02-18",
+    "开盘": 539.73,
+    "收盘": 539.37,
+    "最高": 540.00,
+    "最低": 536.04,
+    "成交量": 20565028,
+    "成交额": 11065078784,
+    "振幅": 0.74,
+    "涨跌幅": 0.23,
+    "涨跌额": 1.22,
+    "换手率": 0
+  }
+]
+```
+
+### Notes
+- All dates should be provided in YYYYMMDD format
+- The API returns data in Chinese field names. Use the field mapping table above for translations
+- Price-related numbers are returned as decimal values
+- Volume and amount are returned as integers
+- Percentage values (amplitude, change_percent, turnover_rate) are returned as decimals

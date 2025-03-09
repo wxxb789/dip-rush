@@ -1,0 +1,118 @@
+{
+  "app": {
+    "title": "DipRush - 市场下跌检测",
+    "description": "使用技术指标检测市场下跌并寻找潜在买入机会。"
+  },
+  "welcome": {
+    "title": "欢迎使用 DipRush",
+    "subtitle": "您的智能市场机会检测助手",
+    "getStarted": "立即开始"
+  },
+  "features": {
+    "technicalAnalysis": "高级技术分析",
+    "technicalAnalysisDesc": "强大的技术指标，包括RSI、MACD和布林带，帮助识别潜在的市场下跌机会",
+    "realtime": "实时分析",
+    "realtimeDesc": "实时市场数据和即时技术分析，助您把握先机",
+    "screening": "智能筛选",
+    "screeningDesc": "自动筛选满足技术指标条件的股票",
+    "i18n": "多语言支持",
+    "i18nDesc": "内置多语言翻译，选择您偏好的语言使用DipRush",
+    "theme": "主题定制",
+    "themeDesc": "明暗主题切换，打造舒适的使用体验"
+  },
+  "navigation": {
+    "screener": "筛选器",
+    "stockDetail": "股票详情",
+    "settings": "设置",
+    "about": "关于",
+    "dashboard": "仪表盘"
+  },
+  "api": {
+    "apiKeyRequired": "需要 API 密钥",
+    "apiKeyMessage": "请输入您的 Finnhub API 密钥以访问股票数据。",
+    "apiKeyInstructions": "您需要有效的 Finnhub API 密钥才能使用此应用程序。",
+    "apiKeyPlaceholder": "输入您的 Finnhub API 密钥",
+    "saveApiKey": "保存 API 密钥",
+    "validatingKey": "验证中...",
+    "getFreeKey": "获取免费 API 密钥",
+    "invalidKey": "请输入有效的 API 密钥",
+    "successKey": "API 密钥保存成功",
+    "showKey": "显示 API 密钥",
+    "hideKey": "隐藏 API 密钥"
+  },
+  "screener": {
+    "title": "寻找下跌",
+    "screeningCriteria": "筛选标准",
+    "rsiThreshold": "RSI 阈值",
+    "macdCrossover": "MACD 金叉",
+    "bollingerBandTouch": "价格低于布林带下轨",
+    "goldenCross": "50日均线上穿200日均线",
+    "runScreener": "运行筛选",
+    "running": "运行中...",
+    "noResultsFound": "未找到匹配的股票。请尝试调整您的标准。"
+  },
+  "stockDetail": {
+    "searchStock": "搜索股票",
+    "searchPlaceholder": "输入股票代码（例如，AAPL）",
+    "search": "搜索",
+    "noStockSelected": "未选择股票",
+    "selectStock": "从筛选结果中选择一只股票或搜索特定的股票代码。",
+    "technicalIndicators": "技术指标",
+    "selectTimeframe": "选择时间周期"
+  },
+  "chart": {
+    "price": "价格",
+    "volume": "交易量",
+    "rsi": "相对强弱指数",
+    "macd": "MACD指标",
+    "bollingerBands": "布林带",
+    "movingAverages": "移动平均线",
+    "day": "日",
+    "week": "周",
+    "month": "月",
+    "high": "最高价",
+    "low": "最低价",
+    "open": "开盘价",
+    "close": "收盘价",
+    "overbought": "超买",
+    "oversold": "超卖",
+    "signalLine": "信号线",
+    "histogram": "柱状图",
+    "upperBand": "上轨",
+    "lowerBand": "下轨",
+    "ma50": "50日均线",
+    "ma200": "200日均线"
+  },
+  "table": {
+    "symbol": "代码",
+    "name": "名称",
+    "price": "价格",
+    "change": "涨跌幅",
+    "rsi": "相对强弱指数",
+    "volume": "成交量",
+    "industry": "行业",
+    "noResults": "没有找到匹配的股票",
+    "loading": "正在加载股票数据...",
+    "search": "搜索股票...",
+    "sortBy": "排序",
+    "matches": "匹配项",
+    "indicators": "指标",
+    "rsiLow": "RSI 低值",
+    "macdCross": "MACD 交叉",
+    "bollingerTouch": "布林带触碰",
+    "goldenCross": "金叉"
+  },
+  "errors": {
+    "errorOccurred": "发生错误",
+    "tryAgain": "重试"
+  },
+  "footer": {
+    "copyright": "© 2023 DipRush. 保留所有权利。",
+    "version": "版本",
+    "documentation": "文档",
+    "github": "GitHub",
+    "about": "关于",
+    "privacyPolicy": "隐私政策",
+    "termsOfService": "服务条款"
+  }
+}

@@ -1,0 +1,185 @@
+classDiagram
+    class AKToolsService {
+        <<service>>
+        +getStockCandles(symbol: string, resolution: string, from: number, to: number): Promise<CandleData>
+        +getTechnicalIndicator(symbol: string, resolution: string, indicator: string, params: IndicatorParams): Promise<IndicatorData>
+        +searchSymbol(query: string): Promise<StockSymbol[]>
+        +getCompanyProfile(symbol: string): Promise<CompanyProfile>
+    }
+    
+    class ThemeManager {
+        <<context>>
+        -theme: Theme
+        +setTheme(theme: Theme): void
+        +getTheme(): Theme
+        +toggleTheme(): void
+        +detectSystemTheme(): Theme
+    }
+    
+    class LanguageManager {
+        <<context>>
+        -language: Language
+        +setLanguage(language: Language): void
+        +getLanguage(): Language
+        +toggleLanguage(): void
+    }
+    
+    class TechnicalAnalysisService {
+        <<service>>
+        +calculateRSI(prices: number[], period: number): number[]
+        +calculateMACD(prices: number[], fastPeriod: number, slowPeriod: number, signalPeriod: number): MACDResult
+        +calculateBollingerBands(prices: number[], period: number, stdDev: number): BollingerBandsResult
+        +calculateMovingAverage(prices: number[], period: number): number[]
+        +detectGoldenCross(shortMA: number[], longMA: number[]): boolean
+        +detectDips(stockData: StockData): DipDetectionResult
+    }
+    
+    class StockDataCache {
+        <<service>>
+        -cache: Map<string, CachedData>
+        +addToCache(key: string, data: any, expiry: number): void
+        +getFromCache(key: string): any | null
+        +clearCache(): void
+        +isExpired(key: string): boolean
+    }
+    
+    class DipDetector {
+        <<service>>
+        -technicalAnalysisService: TechnicalAnalysisService
+        -stockDataCache: StockDataCache
+        -akToolsService: AKToolsService
+        +detectDipsForSymbol(symbol: string): Promise<DipDetectionResult>
+        +detectDipsForMultipleSymbols(symbols: string[]): Promise<Map<string, DipDetectionResult>>
+        +getStockScreenerResults(criteria: ScreeningCriteria): Promise<ScreenerResult[]>
+    }
+    
+    class StockData {
+        <<type>>
+        +symbol: string
+        +candles: CandleData
+        +indicators: Map<string, IndicatorData>
+        +profile: CompanyProfile
+    }
+    
+    class CandleData {
+        <<type>>
+        +open: number[]
+        +high: number[]
+        +low: number[]
+        +close: number[]
+        +volume: number[]
+        +timestamp: number[]
+    }
+    
+    class IndicatorData {
+        <<type>>
+        +name: string
+        +values: number[]
+        +timestamp: number[]
+    }
+    
+    class DipDetectionResult {
+        <<type>>
+        +symbol: string
+        +matchesCriteria: boolean
+        +rsiBelowThreshold: boolean
+        +macdBullishCross: boolean
+        +belowLowerBollingerBand: boolean
+        +goldenCross: boolean
+        +currentPrice: number
+        +rsiValue: number
+        +latestTimestamp: number
+    }
+    
+    class ScreeningCriteria {
+        <<type>>
+        +rsiThreshold: number
+        +lookForMACDBullishCross: boolean
+        +lookForPriceBelowLowerBB: boolean
+        +lookForGoldenCross: boolean
+        +customCriteria: object
+    }
+    
+    class StockChart {
+        <<component>>
+        -data: StockData
+        -selectedIndicators: string[]
+        -timeframe: string
+        +render(): JSX Component
+        +updateData(data: StockData): void
+        +toggleIndicator(indicator: string): void
+        +setTimeframe(timeframe: string): void
+    }
+    
+    class ResultsTable {
+        <<component>>
+        -data: DipDetectionResult[]
+        -sortColumn: string
+        -sortDirection: SortDirection
+        -page: number
+        -pageSize: number
+        +render(): JSX Component
+        +updateData(data: DipDetectionResult[]): void
+        +sort(column: string): void
+        +nextPage(): void
+        +previousPage(): void
+    }
+    
+    class LanguageToggle {
+        <<component>>
+        -currentLanguage: Language
+        +render(): JSX Component
+        +toggleLanguage(): void
+    }
+    
+    class ThemeToggle {
+        <<component>>
+        -currentTheme: Theme
+        +render(): JSX Component
+        +toggleTheme(): void
+    }
+    
+    class Dashboard {
+        <<component>>
+        -screeningResults: ScreenerResult[]
+        -isLoading: boolean
+        -error: Error | null
+        -selectedSymbol: string | null
+        +render(): JSX Component
+        +runScreening(): void
+        +selectSymbol(symbol: string): void
+    }
+    
+    class useStockData {
+        <<hook>>
+        +stockData: Map<string, StockData>
+        +isLoading: boolean
+        +error: Error | null
+        +fetchStockData(symbol: string): Promise<StockData>
+        +fetchMultipleStocks(symbols: string[]): Promise<Map<string, StockData>>
+        +refreshData(): void
+    }
+    
+    class useDipDetection {
+        <<hook>>
+        +results: DipDetectionResult[]
+        +isLoading: boolean
+        +error: Error | null
+        +runScreening(criteria?: ScreeningCriteria): Promise<void>
+        +selectSymbol(symbol: string): void
+        +selectedSymbolData: StockData | null
+    }
+    
+    AKToolsService ..> StockData: returns
+    TechnicalAnalysisService ..> DipDetectionResult: produces
+    DipDetector --> AKToolsService: uses
+    DipDetector --> TechnicalAnalysisService: uses
+    DipDetector --> StockDataCache: uses
+    useStockData --> AKToolsService: uses
+    useStockData --> StockDataCache: uses
+    useDipDetection --> DipDetector: uses
+    Dashboard --> useDipDetection: uses
+    Dashboard --> ResultsTable: contains
+    Dashboard --> StockChart: contains
+    StockChart --> StockData: displays
+    ResultsTable --> DipDetectionResult: displays
