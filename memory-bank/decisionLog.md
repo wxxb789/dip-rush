@@ -106,35 +106,35 @@ As part of the migration from Finnhub to AKTools, the WIKI.md documentation stil
 - Updated Backend Services section in Technology Stack
 - Maintained all technical analysis and feature descriptions
 - Ensured consistency with recent architectural changes
-| 
-| ## 2025-03-06: Change Default Theme to Light
-| 
-| ### Context
-| Currently, the application's default theme is set to 'system', which means it uses the user's system preference (which could be either light or dark). There's a need to make the application consistently start with light theme for new users.
-| 
-| ### Decision
-| 1. Change the default theme from 'system' to 'light' in ThemeContext.tsx
-| 2. Keep all theme functionality intact (user can still select dark or system theme)
-| 3. Only modify the default for new users who haven't set a preference
-| 
-| ### Technical Implementation
-| Update the useLocalStorage hook initialization in ThemeContext.tsx:
-| ```typescript
-| // Change from
-| const [theme, setThemeValue] = useLocalStorage<Theme>(
-|   'diprush-theme',
-|   'system'
-| );
-| 
-| // To
-| const [theme, setThemeValue] = useLocalStorage<Theme>(
-|   'diprush-theme',
-|   'light'
-| );
-| ```
-| 
-| ### Consequences
-| - New users will always get light theme by default
-| - Existing users who already set their preference will keep their chosen theme
-| - Better consistency in user experience for new users
-| - May reduce eye strain for users in bright environments
+
+## 2025-03-06: Change Default Theme to Light ✅
+
+### Context
+Previously, the application's default theme was set to 'system', using the user's system preference. This update ensures new users consistently start with the light theme.
+
+### Decision
+1. Updated default theme from 'system' to 'light' in ThemeContext.tsx
+2. Maintained all theme functionality (users can still select dark or system theme)
+3. Modified only the default for new users without preferences
+
+### Technical Implementation
+Updated the useLocalStorage hook initialization in ThemeContext.tsx:
+```typescript
+// Changed from
+const [theme, setThemeValue] = useLocalStorage<Theme>(
+  'diprush-theme',
+  'system'
+);
+
+// To
+const [theme, setThemeValue] = useLocalStorage<Theme>(
+  'diprush-theme',
+  'light'
+);
+```
+
+### Consequences
+- New users now always get the light theme by default
+- Existing users retain their chosen theme preferences
+- Enhanced consistency in user experience for new users
+- Potential reduction in eye strain for users in bright environments
