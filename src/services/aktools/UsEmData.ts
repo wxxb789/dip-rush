@@ -23,36 +23,36 @@ const isRawUsEmData = (data: unknown): data is RawUsEmData => {
 
 class UsEmDataService {
   private static instance: UsEmDataService;
+  private static initPromise: Promise<UsEmDataService> | null = null;
   private data: UsEmDataDictionary | null = null;
-  private initialized = false;
 
   private constructor() {}
 
-  public static async init(): Promise<Result<UsEmDataService>> {
-    try {
-      const instance = await UsEmDataService.getInstance();
-      return { success: true, data: instance };
-    } catch (error) {
-      return {
-        success: false,
-        error:
-          error instanceof Error
-            ? error
-            : new Error('Unknown initialization error'),
-      };
-    }
-  }
-
   public static async getInstance(): Promise<UsEmDataService> {
-    if (!UsEmDataService.instance) {
-      UsEmDataService.instance = new UsEmDataService();
-      await UsEmDataService.instance.loadData();
+    if (!UsEmDataService.initPromise) {
+      UsEmDataService.initPromise = new Promise<UsEmDataService>(
+        (resolve, reject) => {
+          if (!UsEmDataService.instance) {
+            UsEmDataService.instance = new UsEmDataService();
+            UsEmDataService.instance
+              .loadData()
+              .then(() => {
+                resolve(UsEmDataService.instance);
+              })
+              .catch((error) => {
+                reject(error);
+              });
+          } else {
+            resolve(UsEmDataService.instance);
+          }
+        }
+      );
     }
-    return UsEmDataService.instance;
+    return UsEmDataService.initPromise;
   }
 
   private async loadData(): Promise<void> {
-    if (this.initialized) {
+    if (this.data !== null) {
       return;
     }
 
@@ -66,7 +66,6 @@ class UsEmDataService {
 
       this.data = new Map(Object.entries(rawData));
       Object.freeze(this.data);
-      this.initialized = true;
     } catch (error) {
       throw new Error(
         `Failed to load US EM data: ${
@@ -76,24 +75,71 @@ class UsEmDataService {
     }
   }
 
-  public static get dictionary(): UsEmDataDictionary | null {
-    return UsEmDataService.instance?.data || null;
+  // Instance methods for data access
+  public get dictionary(): UsEmDataDictionary {
+    if (this.data === null) {
+      throw new Error('US EM data not initialized');
+    }
+    return this.data;
   }
 
-  public static getKeys(): string[] {
-    return Array.from(UsEmDataService.dictionary?.keys() || []);
+  public getKeys(): string[] {
+    return Array.from(this.dictionary.keys());
   }
 
-  public static getValues(): string[] {
-    return Array.from(UsEmDataService.dictionary?.values() || []);
+  public getValues(): string[] {
+    return Array.from(this.dictionary.values());
   }
 
-  public static getEntries(): [string, string][] {
-    return Array.from(UsEmDataService.dictionary?.entries() || []);
+  public getEntries(): [string, string][] {
+    return Array.from(this.dictionary.entries());
   }
 
-  public static getValue(key: string): string | undefined {
-    return UsEmDataService.dictionary?.get(key);
+  public getValue(key: string): string | undefined {
+    return this.dictionary.get(key);
+  }
+
+  // Static convenience methods
+  public static async getKeys(): Promise<string[]> {
+    const instance = await UsEmDataService.getInstance();
+    return instance.getKeys();
+  }
+
+  public static async getValues(): Promise<string[]> {
+    const instance = await UsEmDataService.getInstance();
+    return instance.getValues();
+  }
+
+  public static async getEntries(): Promise<[string, string][]> {
+    const instance = await UsEmDataService.getInstance();
+    return instance.getEntries();
+  }
+
+  public static async getValue(key: string): Promise<string | undefined> {
+    const instance = await UsEmDataService.getInstance();
+    return instance.getValue(key);
+  }
+
+  // Safe version with Result type
+  public static async getValueSafe(key: string): Promise<Result<string>> {
+    try {
+      const instance = await UsEmDataService.getInstance();
+      const value = instance.getValue(key);
+
+      if (value === undefined) {
+        return {
+          success: false,
+          error: new Error(`Key '${key}' not found in US EM data`),
+        };
+      }
+
+      return { success: true, data: value };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error : new Error('Unknown error'),
+      };
+    }
   }
 }
 
