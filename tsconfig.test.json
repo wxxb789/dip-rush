@@ -5,7 +5,7 @@
     "@/*": ["src/*"]
   },
   "compilerOptions": {
-    "noEmit": false,
+    "noEmit": true,
     "module": "ESNext",
     "forceConsistentCasingInFileNames": true
   },
